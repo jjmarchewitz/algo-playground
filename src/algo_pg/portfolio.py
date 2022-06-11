@@ -380,76 +380,76 @@ class Portfolio():
 
         return order_status
 
-    def get_current_timestamp(self):
-        """
-        Gets the most recent timestamp that the DataManagers are on.
+    # def get_current_timestamp(self):
+    #     """
+    #     Gets the most recent timestamp that the DataManagers are on.
 
-        Returns:
-            The most recent timestamp from the reference position's dataframe
-        """
+    #     Returns:
+    #         The most recent timestamp from the reference position's dataframe
+    #     """
 
-        # Check if positions has items in it
-        return self._reference_position.data_manager.get_last_row().timestamp
+    #     # Check if positions has items in it
+    #     return self._reference_position.data_manager.get_last_row().timestamp
 
-    def _create_new_daily_row_generators(self, start_time, end_time):
-        """
-        Creates new daily row generators for each Position associated with this
-        Portfolio.
+    # def _create_new_daily_row_generators(self, start_time, end_time):
+    #     """
+    #     Creates new daily row generators for each Position associated with this
+    #     Portfolio.
 
-        Args:
-            start_time: The ISO-8601 compliant date/time for the generators to start
-                generating bars.
-            end_time: The ISO-8601 compliant date/time for the generators to stop
-                generating bars.
-        """
+    #     Args:
+    #         start_time: The ISO-8601 compliant date/time for the generators to start
+    #             generating bars.
+    #         end_time: The ISO-8601 compliant date/time for the generators to stop
+    #             generating bars.
+    #     """
 
-        self._reference_position.data_manager.create_new_daily_row_generator(
-            start_time, end_time)
+    #     self._reference_position.data_manager.create_new_daily_row_generator(
+    #         start_time, end_time)
 
-        for position in self.positions:
-            position.data_manager.create_new_daily_row_generator(start_time, end_time)
+    #     for position in self.positions:
+    #         position.data_manager.create_new_daily_row_generator(start_time, end_time)
 
-    def _increment_all_positions(self):
-        """
-        Increment the generator for every Position associated with this Portfolio and
-        update the price attribute for each Position to use the new price data.
-        """
+    # def _increment_all_positions(self):
+    #     """
+    #     Increment the generator for every Position associated with this Portfolio and
+    #     update the price attribute for each Position to use the new price data.
+    #     """
 
-        next(self._reference_position.data_manager._row_generator)
-        self._reference_position.update_price_from_current_bar()
+    #     next(self._reference_position.data_manager._row_generator)
+    #     self._reference_position.update_price_from_current_bar()
 
-        for position in self.positions:
+    #     for position in self.positions:
 
-            # Increment the row generator to update the raw data to the next TimeFrame
-            next(position.data_manager._row_generator)
+    #         # Increment the row generator to update the raw data to the next TimeFrame
+    #         next(position.data_manager._row_generator)
 
-            # Update the price attribute based on the current bar
-            position.update_price_from_current_bar()
+    #         # Update the price attribute based on the current bar
+    #         position.update_price_from_current_bar()
 
-        if not self._any_generator_reached_end_of_day():
-            self._increment_count += 1
+    #     if not self._any_generator_reached_end_of_day():
+    #         self._increment_count += 1
 
-    def _any_generator_reached_end_of_day(self):
-        """
-        Determines if any generator inside any Position has hit the end of its
-        generation. That indicates it has reached the end of the day and a new daily
-        generator needs to be created.
+    # def _any_generator_reached_end_of_day(self):
+    #     """
+    #     Determines if any generator inside any Position has hit the end of its
+    #     generation. That indicates it has reached the end of the day and a new daily
+    #     generator needs to be created.
 
-        Returns:
-            A bool that shows if any generator inside any Position has reached the end of
-            the day.
-        """
-        generator_at_end_of_day = False
+    #     Returns:
+    #         A bool that shows if any generator inside any Position has reached the end of
+    #         the day.
+    #     """
+    #     generator_at_end_of_day = False
 
-        if self._reference_position.data_manager.generator_at_end_of_day == True:
-            generator_at_end_of_day = True
+    #     if self._reference_position.data_manager.generator_at_end_of_day == True:
+    #         generator_at_end_of_day = True
 
-        for position in self.positions:
-            if (position.data_manager.generator_at_end_of_day == True):
-                generator_at_end_of_day = True
-                break
+    #     for position in self.positions:
+    #         if (position.data_manager.generator_at_end_of_day == True):
+    #             generator_at_end_of_day = True
+    #             break
 
-        return generator_at_end_of_day
+    #     return generator_at_end_of_day
 
     def copy(self, name=None):
         # TODO: Implement deep copy here and in Position

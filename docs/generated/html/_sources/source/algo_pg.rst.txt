@@ -9,6 +9,7 @@ algo_pg
 	algo_pg/position
 	algo_pg/stat_calculators
 	algo_pg/machine
+	algo_pg/asset_manager
 	algo_pg/portfolio
 	algo_pg/util
 

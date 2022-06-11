@@ -1,5 +1,5 @@
 """
-TODO:
+DOC:
 """
 
 from algo_pg.util import get_list_of_trading_days_in_range
@@ -110,7 +110,7 @@ class DataManager():
         self.df = pd.DataFrame(columns=self._df_columns)
 
     def _add_start_buffer_data_to_raw_df(self):
-        """TODO:"""
+        """DOC:"""
 
         # Shift the start date back by one day
         original_start_dt = isoparse(self.data_settings.start_date)
@@ -229,7 +229,7 @@ class DataManager():
             self._next_raw_df_index += 1
 
     def _update_raw_df(self):
-        """TODO:"""
+        """DOC:"""
         # Remove the first row from the raw df if the total row count is above the limit
         if len(self._raw_df.index) > self.max_rows:
             self._raw_df = self._raw_df.iloc[1:]

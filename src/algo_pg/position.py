@@ -1,6 +1,6 @@
 """
 A Position is simply the name for an asset that a buyer actually has possession of. While
-Apple's stock exists in the world as an asset, it only becomes a person's position if 
+Apple's stock exists in the world as an asset, it only becomes a person's position if
 they own Apple stock. A Position object as defined here has a symbol, quantity, and price
 associated with it.
 """
@@ -21,10 +21,10 @@ class Position():
         Constructor for the Position class.
 
         Args:
-            alpaca_api: A bundle of Alpaca APIs all created and authenticated with the 
+            alpaca_api: A bundle of Alpaca APIs all created and authenticated with the
                 keys in the repo's alpaca.config.
             data_settings: An instance of the DataSettings dataclass.
-            symbol: A string for the market symbol of this position (i.e. "AAPL" or 
+            symbol: A string for the market symbol of this position (i.e. "AAPL" or
                 "GOOG").
             initial_quantity: The quantity of this asset that should be held when this
                 instance is finished being constructed.
@@ -45,11 +45,11 @@ class Position():
 
         # TODO: self.time_when_price_last_updated = None
 
-    def update_price_from_current_bar(self):
-        """
-        Updates the current price based on the most recent bar of information.
-        """
-        self.price = get_price_from_bar(self.data_manager.current_bar)
+    # def update_price_from_current_bar(self):
+    #     """
+    #     Updates the current price based on the most recent bar of information.
+    #     """
+    #     self.price = get_price_from_bar(self.data_manager.current_bar)
 
     def get_asset_class(self):
         """
@@ -57,14 +57,14 @@ class Position():
         Asset Class is a string identifying what class an asset belongs to
         (i.e. "us equity")
 
-        Returns: 
+        Returns:
             An asset class string
         """
         return getattr(self.asset, "class")
 
-    def get_df(self):
-        """TODO:"""
-        return self.data_manager.df
+    # def get_df(self):
+    #     """DOC:"""
+    #     return self.data_manager.df
 
     def total_value(self):
         """
@@ -75,46 +75,54 @@ class Position():
         """
         return self.quantity * self.price
 
-    def _catch_up_to_reference_position(self, reference_position, increments):
-        """
-        If this Position was created mid-simulation then it needs to generate all of the
-        equivalent data from earlier TimeFrames that it is missing (since it was just
-        created). This function allows the current position to "catch up" to the reference
-        Position in terms of historical data stored in the dataframe and in terms of
-        current price.
+    # def _catch_up_to_reference_position(self, reference_position, increments):
+    #     """
+    #     If this Position was created mid-simulation then it needs to generate all of the
+    #     equivalent data from earlier TimeFrames that it is missing (since it was just
+    #     created). This function allows the current position to "catch up" to the reference
+    #     Position in terms of historical data stored in the dataframe and in terms of
+    #     current price.
 
-        Args:
-            reference_position: The reference Position from the parent Portfolio object.
-            increments: The number of data increments (i.e. total rows generated, or 
-            total number of times each generator has been incremented).
-        """
+    #     Args:
+    #         reference_position: The reference Position from the parent Portfolio object.
+    #         increments: The number of data increments (i.e. total rows generated, or
+    #         total number of times each generator has been incremented).
+    #     """
 
-        target_timestamp = reference_position.data_manager.get_last_row().timestamp
+    #     target_timestamp = reference_position.data_manager.get_last_row().timestamp
 
-        # Get a list of all valid trading days the market was open for in the date range
-        # provided with open and close times as attributes.
-        trading_days = get_list_of_trading_days_in_range(
-            self.alpaca_api, self.data_settings.start_date, self.data_settings.end_date)
+    #     # Get a list of all valid trading days the market was open for in the date range
+    #     # provided with open and close times as attributes.
+    #     trading_days = get_list_of_trading_days_in_range(
+    #         self.alpaca_api, self.data_settings.start_date, self.data_settings.end_date)
 
-        for day in trading_days:
+    #     for day in trading_days:
 
-            self.data_manager.create_new_daily_row_generator(
-                day.open_time_iso, day.close_time_iso)
+    #         self.data_manager.create_new_daily_row_generator(
+    #             day.open_time_iso, day.close_time_iso)
 
-            while True:
-                try:
-                    next(self.data_manager._row_generator)
-                except StopIteration:
-                    break
+    #         while True:
+    #             try:
+    #                 next(self.data_manager._row_generator)
+    #             except StopIteration:
+    #                 break
 
-                current_timestamp = self.data_manager.get_last_row().timestamp
-                if current_timestamp == target_timestamp:
-                    break
+    #             current_timestamp = self.data_manager.get_last_row().timestamp
+    #             if current_timestamp == target_timestamp:
+    #                 break
 
-            if current_timestamp == target_timestamp:
-                break
+    #         if current_timestamp == target_timestamp:
+    #             break
 
-        self.update_price_from_current_bar()
+    #     self.update_price_from_current_bar()
 
-        # TODO: Use the increments arg to only generate the number of rows needed, not
-        # from the start of the whole machine
+    #     # TODO: Use the increments arg to only generate the number of rows needed, not
+    #     # from the start of the whole machine
+
+
+class PositionDataFrameBuilder():
+
+    # TODO:
+
+    def __init__(self):
+        pass
