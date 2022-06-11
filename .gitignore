@@ -11,6 +11,9 @@
 
 # Project specific
 /alpaca.config
+docs/generated/*
+!docs/generated/html
+docs/source
 
 
 ######################################
