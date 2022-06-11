@@ -1,45 +1,47 @@
-from algo_pg.portfolio import OrderType, Portfolio
-from algo_pg.position import Position
-from algo_pg.machine import TradingMachine
+from algo_pg.algorithms.bang_bang.alg import BangBang
+from algo_pg.machine import TradingMachine, DataSettings
+from algo_pg.portfolio import Portfolio
+from algo_pg.stat_calculators import dummy_420_69, avg_last_5, net_last_5
 from algo_pg.util import AlpacaAPIBundle
 from alpaca_trade_api import TimeFrame
+from datetime import timedelta
 
 
 def main():
     alpaca_api = AlpacaAPIBundle()
 
-    # Only Days, Hours, and Minutes are supported as time frames
-    machine = TradingMachine(
-        alpaca_api, "2022-03-08", "2022-03-20",
-        time_frame=TimeFrame.Day)
+    # Keys will become column names and the function object that is the value will be
+    # called on every row of every Position's DataManager
+    stat_dict = {
+        "WS": dummy_420_69,
+        "avg_l5_vwap": avg_last_5,
+        "net_l5_vwap": net_last_5
+    }
 
-    # Create the first portfolio
-    portfolio1 = Portfolio(alpaca_api, starting_cash=10000, name="P1")
+    # A dataclass that stores general information about data settings and how the data
+    # should be collected
+    data_settings = DataSettings(
+        start_date="2021-09-09",
+        end_date="2021-10-20",
+        time_frame=TimeFrame.Hour,
+        stat_dict=stat_dict,
+        max_rows_in_df=10_000,
+        start_buffer_time_delta=timedelta(days=5),
+        time_frames_between_algo_runs=1
+    )
 
-    # Create a new position directly into the portfolio
-    portfolio1.create_new_position("AAPL", 5)
+    # Create the trading machine with the appropriate data settings
+    machine = TradingMachine(alpaca_api, data_settings)
 
-    # Add an existing position to the portfolio
-    position1 = Position(alpaca_api, "GOOG", 1)
-    portfolio1.add_existing_position(position1)
+    # Define an instance of an algorithm with a portfolio
+    portfolio1 = Portfolio(alpaca_api, data_settings, starting_cash=5_000, name="P1")
+    algo1 = BangBang(alpaca_api, data_settings, portfolio1)
 
-    # Create the second portfolio
-    portfolio2 = Portfolio(alpaca_api, starting_cash=10000, name="P2")
-    order_num1 = portfolio2.place_order("GOOG", 5.0, OrderType.BUY)
-    order_num2 = portfolio2.place_order("IVV", 25.6, OrderType.BUY)
-    portfolio2.cancel_order(order_num2)
+    machine.add_algo_instance(algo1)
 
-    # Add both portfolios along with fake algorithms to the trading machine. The algos
-    # are dummy strings (for now) because they are keys in a dictionary, so if you add
-    # more make sure to make the name unique from all others. Later, the actual instance
-    # of the algorithm will be able to be the key in the dict.
-    machine.add_algo_portfolio_pair("DummyAlgo1", portfolio1)
-    machine.add_algo_portfolio_pair("DummyAlgo2", portfolio2)
-
-    # Rage against the machine
     machine.run()
 
-    # breakpoint()
+    breakpoint()
 
 
 if __name__ == "__main__":

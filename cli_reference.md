@@ -1,5 +1,3 @@
-# TODO:
-
 # Commands Cheat Sheet
 ## Note use (python) instead of (python3)
 ## Full Form Command For Pip Install

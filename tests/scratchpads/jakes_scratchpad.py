@@ -1,4 +1,5 @@
 from algo_pg.algorithms.bang_bang.alg import BangBang
+from algo_pg.asset_manager import AssetDataFrameBuilder, AssetDataManager
 from algo_pg.machine import TradingMachine, DataSettings
 from algo_pg.portfolio import Portfolio
 from algo_pg.stat_calculators import dummy_420_69, avg_last_5, net_last_5
@@ -13,7 +14,6 @@ def main():
     # Keys will become column names and the function object that is the value will be
     # called on every row of every Position's DataManager
     stat_dict = {
-        "WS": dummy_420_69,
         "avg_l5_vwap": avg_last_5,
         "net_l5_vwap": net_last_5
     }
@@ -26,28 +26,11 @@ def main():
         time_frame=TimeFrame.Hour,
         stat_dict=stat_dict,
         max_rows_in_df=10_000,
-        start_buffer_time_delta=timedelta(days=5),
+        start_buffer_time_delta=None,
         time_frames_between_algo_runs=1
     )
 
-    # Create the trading machine with the appropriate data settings
-    machine = TradingMachine(alpaca_api, data_settings)
-
-    # Define an instance of an algorithm with a portfolio
-    portfolio1 = Portfolio(alpaca_api, data_settings, starting_cash=5_000, name="P1")
-    algo1 = BangBang(alpaca_api, data_settings, portfolio1)
-
-    machine.add_algo_instance(algo1)
-
-    machine.run()
-
-    ############
-
-    # dm = DataManager(alpaca_api, data_settings, "GOOG")
-
-    # dm.set_df_with_dates("2022-03-08", "2022-03-20")
-
-    ############
+    asset_df_builder = AssetDataFrameBuilder(alpaca_api, data_settings, "AAPL")
 
     breakpoint()
 
