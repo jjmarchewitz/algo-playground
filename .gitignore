@@ -11,8 +11,7 @@
 
 # Project specific
 /alpaca.config
-docs/generated/*
-!docs/generated/html
+docs/generated/doctrees
 docs/source
 
 
