@@ -20,11 +20,47 @@ class AssetDataManager():
 
     def add_asset(self, symbol):
         """DOC:"""
-        pass
+        new_asset_df_builder = AssetDataFrameBuilder(
+            self.alpaca_api, self.data_settings, symbol)
+        self.asset_df_builders.update({symbol: new_asset_df_builder})
+
+        # TODO: Mechanism to update asset builder DF to be in sync with the rest
 
     def contains_asset(self, symbol):
         """DOC:"""
-        pass
+        retval = False
+
+        for _, asset_df_builder in self.asset_df_builders.items():
+            if asset_df_builder.symbol == symbol:
+                retval = True
+                break
+
+        return retval
+
+    def get_asset_df_builder(self, symbol):
+        """DOC:"""
+        retval = None
+
+        for _, asset_df_builder in self.asset_df_builders.items():
+            if asset_df_builder.symbol == symbol:
+                retval = asset_df_builder
+                break
+
+        return retval
+
+    def get_df(self, symbol):
+        """DOC:"""
+        # TODO: Make sure this works the way you think it will with references and everything
+
+        df = None
+
+        if not self.contains_asset(symbol):
+            self.add_asset(symbol)
+
+        asset_df_builder = self.get_asset_df_builder(symbol)
+        df = asset_df_builder.df
+
+        return df
 
 
 class AssetDataFrameBuilder():
