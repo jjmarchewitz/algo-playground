@@ -250,6 +250,7 @@ class AssetDataFrameBuilder():
 
     def _trim_df(self):
         """DOC:"""
+        # TODO: Move this to a util
         # Remove the first row from the df if the total row count is above the limit
         if len(self.df.index) > self.max_rows:
             self.df = self.df.iloc[1:]

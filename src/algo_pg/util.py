@@ -225,3 +225,14 @@ def get_price_from_bar(bar):
     price = bar.vw
 
     return price
+
+
+#######################
+# DATAFRAME UTILITIES #
+#######################
+
+def trim_df(df, max_rows):
+    """DOC:"""
+    # Remove the first row from the df if the total row count is above the limit
+    if len(df.index) > max_rows:
+        df = df.iloc[1:]

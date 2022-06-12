@@ -92,23 +92,23 @@ class DataManager():
     #     column.
     #     """
 
-        if not self.generator_at_end_of_day:
+        # if not self.generator_at_end_of_day:
 
-            # Add a new row to the main dataframe
-            self.df.loc[self._next_df_index] = ["ERROR_NOT_REPLACED"
-                                                for _ in self._df_columns]
+        #     # Add a new row to the main dataframe
+        #     self.df.loc[self._next_df_index] = ["ERROR_NOT_REPLACED"
+        #                                         for _ in self._df_columns]
 
-            last_row_of_raw_df = self._raw_df.loc[self._next_raw_df_index - 1]
+        #     last_row_of_raw_df = self._raw_df.loc[self._next_raw_df_index - 1]
 
-            # Copy over columns from raw_df
-            for column, value in last_row_of_raw_df.items():
-                setattr(self.df.loc[self._next_df_index], column, value)
+        #     # Copy over columns from raw_df
+        #     for column, value in last_row_of_raw_df.items():
+        #         setattr(self.df.loc[self._next_df_index], column, value)
 
-            # Calculate any statistics from the stat dict and add them to the appropriate
-            # column in self.df
-            for column, func in self.stat_dict.items():
-                last_raw_df_row_index = self._next_raw_df_index - 1
-                value = func(self._raw_df, last_raw_df_row_index)
-                setattr(self.df.loc[self._next_df_index], column, value)
+        #     # Calculate any statistics from the stat dict and add them to the appropriate
+        #     # column in self.df
+        #     for column, func in self.stat_dict.items():
+        #         last_raw_df_row_index = self._next_raw_df_index - 1
+        #         value = func(self._raw_df, last_raw_df_row_index)
+        #         setattr(self.df.loc[self._next_df_index], column, value)
 
-            self._next_df_index += 1
+        #     self._next_df_index += 1
