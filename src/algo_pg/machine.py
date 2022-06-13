@@ -5,6 +5,7 @@ data.
 """
 
 from algo_pg.algorithms.base_algorithm import Algorithm
+from algo_pg.asset_manager import AssetDataManager
 from algo_pg.util import get_list_of_trading_days_in_range
 from alpaca_trade_api import TimeFrame
 from dataclasses import dataclass
@@ -45,6 +46,7 @@ class TradingMachine():
 
         # Bundled alpaca API dataclass
         self.alpaca_api = alpaca_api
+        self.data_settings = data_settings
 
         # Attributes to keep track of the time span of the trading_machine
         self.start_date = data_settings.start_date
@@ -63,6 +65,8 @@ class TradingMachine():
 
         # Pairs of algorithms and portfolios
         self.algo_instances = []
+
+        self.asset_manager = AssetDataManager(self.alpaca_api, self.data_settings)
 
     def add_algo_instance(self, algorithm_with_portfolio):
         """
@@ -92,22 +96,23 @@ class TradingMachine():
             # Update the current date variable in the machine
             self.current_trading_date = trading_day.date
 
-            # For every algo - portfolio pair, simulate an entire day no matter what the
-            # time frame is.
-            for algo in self.algo_instances:
+            self.asset_manager.start_new_day(
+                trading_day.open_time_iso, trading_day.close_time_iso)
 
-                portfolio = algo.portfolio
+            while not self.asset_manager.df_builders_at_end_of_day:
 
-                portfolio._create_new_daily_row_generators(
-                    trading_day.open_time_iso, trading_day.close_time_iso)
+                self.asset_manager.increment()
 
-                while not portfolio._any_generator_reached_end_of_day():
-                    portfolio._increment_all_positions()
-                    completed_order_ids = portfolio._process_pending_orders()
-                    algo.run_for_one_time_frame()
+                if not self.asset_manager.df_builders_at_end_of_day:
 
-                    if not portfolio._any_generator_reached_end_of_day():
-                        # TODO: Change to Logging library
+                    # For every algo - portfolio pair, simulate an entire day no matter what the
+                    # time frame is.
+                    for algo in self.algo_instances:
+
+                        portfolio = algo.portfolio
+
+                        completed_order_ids = portfolio._process_pending_orders()
+                        algo.run_for_one_time_frame()
                         print(
                             f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
                             f"${round(portfolio.total_value(), 2):,.2f} - "
@@ -117,5 +122,5 @@ class TradingMachine():
         print("\n\n--Results--")
         for algo in self.algo_instances:
             print(f"Final value of Portfolio \"{algo.portfolio.name}\" - "
-                  f"${round(portfolio.total_value(), 2):,.2f}")
+                  f"${round(algo.portfolio.total_value(), 2):,.2f}")
         print("\n")

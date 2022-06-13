@@ -26,11 +26,14 @@ def main():
         time_frame=TimeFrame.Hour,
         stat_dict=stat_dict,
         max_rows_in_df=10_000,
-        start_buffer_time_delta=None,
+        start_buffer_time_delta=timedelta(days=4),
         time_frames_between_algo_runs=1
     )
 
-    asset_df_builder = AssetDataFrameBuilder(alpaca_api, data_settings, "AAPL")
+    adm = AssetDataManager(alpaca_api, data_settings)
+    adm.add_asset("AAPL")
+    # adm.add_asset("GOOG")
+    # adm.add_asset("IVV")
 
     breakpoint()
 

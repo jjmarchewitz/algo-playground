@@ -17,6 +17,7 @@ class AssetDataManager():
         self.data_settings = data_settings
         self.max_rows = self.data_settings.max_rows_in_df
         self.asset_df_builders = {}
+        self.df_builders_at_end_of_day = False
 
     def add_asset(self, symbol):
         """DOC:"""
@@ -28,29 +29,16 @@ class AssetDataManager():
 
     def contains_asset(self, symbol):
         """DOC:"""
-        retval = False
-
-        for _, asset_df_builder in self.asset_df_builders.items():
-            if asset_df_builder.symbol == symbol:
-                retval = True
-                break
-
-        return retval
+        return symbol in self.asset_df_builders.keys()
 
     def get_asset_df_builder(self, symbol):
         """DOC:"""
-        retval = None
-
-        for _, asset_df_builder in self.asset_df_builders.items():
-            if asset_df_builder.symbol == symbol:
-                retval = asset_df_builder
-                break
-
-        return retval
+        return self.asset_df_builders[symbol]
 
     def get_df(self, symbol):
         """DOC:"""
-        # TODO: Make sure this works the way you think it will with references and everything
+        # TODO: Make sure this works the way you think it will with references and
+        # everything
 
         df = None
 
@@ -61,6 +49,19 @@ class AssetDataManager():
         df = asset_df_builder.df
 
         return df
+
+    def start_new_day(self, start_time, end_time):
+        """DOC:"""
+        for _, asset_df_builder in self.asset_df_builders.items():
+            asset_df_builder.create_new_daily_row_generator(start_time, end_time)
+        self.df_builders_at_end_of_day = False
+
+    def increment(self):
+        """DOC:"""
+        for _, asset_df_builder in self.asset_df_builders.items():
+            end_of_day = next(asset_df_builder._row_generator)
+            if end_of_day:
+                self.df_builders_at_end_of_day = True
 
 
 class AssetDataFrameBuilder():
@@ -100,13 +101,17 @@ class AssetDataFrameBuilder():
     def _add_start_buffer_data_to_df(self):
         """DOC:"""
 
-        # Shift the start date back by one day
         original_start_dt = isoparse(self.data_settings.start_date)
-        new_start_dt_obj = original_start_dt - self.data_settings.start_buffer_time_delta
-        buffer_start_date = new_start_dt_obj.isoformat() + "Z"
-        buffer_end_date = original_start_dt.isoformat() + "Z"
 
-        self.update_df_with_dates(buffer_start_date, buffer_end_date)
+        # Shift the start date back by one day
+        buffer_start_dt = original_start_dt - self.data_settings.start_buffer_time_delta
+        buffer_start_str = buffer_start_dt.isoformat() + "Z"
+
+        # Make the end buffer be one day before the regular start of the data
+        buffer_end_dt = original_start_dt - timedelta(days=1)
+        buffer_end_str = buffer_end_dt.isoformat() + "Z"
+
+        self.update_df_with_dates(buffer_start_str, buffer_end_str)
 
     def update_df_with_dates(self, start_date, end_date):
         """
