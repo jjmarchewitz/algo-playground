@@ -105,8 +105,8 @@ class TradingMachine():
 
                 if not self.asset_manager.df_builders_at_end_of_day:
 
-                    # For every algo - portfolio pair, simulate an entire day no matter what the
-                    # time frame is.
+                    # For every algo - portfolio pair, simulate an entire day no matter
+                    # what the time frame is.
                     for algo in self.algo_instances:
 
                         portfolio = algo.portfolio
