@@ -4,8 +4,7 @@ the project.
 
 """
 
-from alpaca_trade_api import REST, TimeFrameUnit
-from alpaca_trade_api.rest_async import AsyncREST
+from alpaca_trade_api import AsyncRest, REST, TimeFrameUnit
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from os import environ, getcwd, sep
@@ -94,7 +93,7 @@ class AlpacaAPIBundle():
         )
 
         # Create an async instance of the alpaca market data API
-        self.market_data_async = AsyncREST(
+        self.market_data_async = AsyncRest(
             api_key_ID,
             secret_key,
             market_data_website
