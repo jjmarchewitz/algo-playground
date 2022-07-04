@@ -4,7 +4,8 @@ the project.
 
 """
 
-from alpaca_trade_api import AsyncREST, REST, TimeFrameUnit
+from alpaca_trade_api import REST, TimeFrameUnit
+from alpaca_trade_api.rest_async import AsyncREST
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from os import environ, getcwd, sep
