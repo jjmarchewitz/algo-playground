@@ -91,9 +91,9 @@ async def get_historic_quotes(symbols, start, end, timeframe: TimeFrame):
 
 
 async def run(symbols):
-    start = pd.Timestamp('2022-06-10', tz=NY).date().isoformat()
-    end = pd.Timestamp('2022-06-10', tz=NY).date().isoformat()
-    timeframe: TimeFrame = TimeFrame.Hour
+    start = pd.Timestamp('2022-06-10').date().isoformat()
+    end = pd.Timestamp('2022-06-10').date().isoformat()
+    timeframe: TimeFrame = TimeFrame.Minute
     return await get_historic_bars(symbols, start, end, timeframe)
     # await get_historic_trades(symbols, start, end, timeframe)
     # await get_historic_quotes(symbols, start, end, timeframe)
@@ -102,43 +102,43 @@ async def run(symbols):
 if __name__ == '__main__':
     api_key_id = 'PK8MO90Z0923DYSZ7FHM'
     api_secret = 'D3xb979XJZV9ff04UZaMvbnPxYSVnhC2laFVFBP5'
-    base_url = "https://paper-api.alpaca.markets"
+    base_url = "https://data.alpaca.markets"
     feed = "iex"  # change to "sip" if you have a paid account
 
     rest = AsyncRest(key_id=api_key_id,
-                     secret_key=api_secret)
+                     secret_key=api_secret,
+                     data_url=base_url)
 
     api = tradeapi.REST(key_id=api_key_id,
                         secret_key=api_secret,
                         base_url=URL(base_url))
 
     start_time = time.time()
-    symbols = [
-        "AAPL", "GOOG", "IVV", "SPY", "INTC", "NVDA", "TSM", "MSFT", "TSLA", "META",
-        "AMZN", "UNH", "JNJ", "XOM", "SUN", "PG", "JPM", "WMT", "HD", "BABA", "BAC",
-        "PFE", "KO", "MA", "V", "ABBV", "NVO", "AVGO", "PEP", "TM", "SHEL", "VZ", "UL",
-        "TMO", "COST", "ABT", "CMCSA", "ADBE", "DIS", "NKE", "CSCO", "ORCL", "CRM",
-        "MCD", "TMUS", "BHP", "BMY", "PM", "WFC", "AMD", "UPS", "QCOM", "T", "TXN",
-        "RTX", "MS", "HON", "MDT", "IBM", "CVS", "LOW", "SCHW", "ANTM", "AXP", "CAT",
-        "LMT", "SPGI", "SONY", "SAP", "INTU", "BP", "BLK", "C", "PYPL", "BUD", "AMAT",
-        "MO", "ADP", "PLD", "SBUX", "PBR", "EOG", "BKNG", "DUK", "SYK", "ADI", "NFLX",
-        "CI", "GE", "BX", "MMM", "BAM", "INFY", "SO", "ZI", "BA", "ROK", "NOC", "TGT"
-    ]
+    # symbols = [
+    #     "AAPL", "GOOG", "IVV", "SPY", "INTC", "NVDA", "TSM", "MSFT", "TSLA", "META",
+    #     "AMZN", "UNH", "JNJ", "XOM", "SUN", "PG", "JPM", "WMT", "HD", "BABA", "BAC",
+    #     "PFE", "KO", "MA", "V", "ABBV", "NVO", "AVGO", "PEP", "TM", "SHEL", "VZ", "UL",
+    #     "TMO", "COST", "ABT", "CMCSA", "ADBE", "DIS", "NKE", "CSCO", "ORCL", "CRM",
+    #     "MCD", "TMUS", "BHP", "BMY", "PM", "WFC", "AMD", "UPS", "QCOM", "T", "TXN",
+    #     "RTX", "MS", "HON", "MDT", "IBM", "CVS", "LOW", "SCHW", "ANTM", "AXP", "CAT",
+    #     "LMT", "SPGI", "SONY", "SAP", "INTU", "BP", "BLK", "C", "PYPL", "BUD", "AMAT",
+    #     "MO", "ADP", "PLD", "SBUX", "PBR", "EOG", "BKNG", "DUK", "SYK", "ADI", "NFLX",
+    #     "CI", "GE", "BX", "MMM", "BAM", "INFY", "SO", "ZI", "BA", "ROK", "NOC", "TGT"
+    # ]
+    symbols = ["ZI"]
     test222 = asyncio.run(run(symbols))
     print(f"took {time.time() - start_time} sec")
 
     alpaca_api = AlpacaAPIBundle()
 
-    # start_time = time.time()
+    start_time = time.time()
+    test333 = []
 
-    # for symbol in symbols:
-    #     bar_generator = alpaca_api.market_data.get_bars_iter(
-    #         symbol, TimeFrame.Hour, "2022-06-10", "2022-06-10")
-    #     for bar in bar_generator:
-    #         # print(f"{bar.t} - {symbol} - {bar.vw}")
-    #         pass
+    for symbol in symbols:
+        test333.append(alpaca_api.market_data.get_bars(
+            symbol, TimeFrame.Minute, "2022-06-10", "2022-06-10"))
 
-    # time_taken = round(time.time() - start_time, 2)
-    # print(f"\n\n--Time--\n{time_taken} s\n\n")
+    time_taken = round(time.time() - start_time, 2)
+    print(f"\n\n--Time--\n{time_taken} s\n\n")
 
     breakpoint()

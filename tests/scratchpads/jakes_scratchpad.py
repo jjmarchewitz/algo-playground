@@ -1,15 +1,15 @@
 from algo_pg.algorithms.bang_bang.alg import BangBang
-from algo_pg.asset_manager import AssetDataFrameBuilder, AssetDataManager
+from algo_pg.signals import AlpacaDataManager
 from algo_pg.machine import TradingMachine, DataSettings
 from algo_pg.portfolio import Portfolio
 from algo_pg.stat_calculators import avg_last_5, net_last_5
-from algo_pg.util import AlpacaAPIBundle
+from algo_pg.util import apg_init
 from alpaca_trade_api import TimeFrame
 from datetime import timedelta
 
 
 def main():
-    alpaca_api = AlpacaAPIBundle()
+    alpaca_api = apg_init()
 
     # Keys will become column names and the function object that is the value will be
     # called on every row of every Position's DataManager
@@ -30,8 +30,8 @@ def main():
         time_frames_between_algo_runs=1
     )
 
-    adm = AssetDataManager(alpaca_api, data_settings)
-    adm.add_asset("AAPL")
+    adm = AlpacaDataManager(alpaca_api, data_settings)
+    # adm.add_asset("AAPL")
     # adm.add_asset("GOOG")
     # adm.add_asset("IVV")
 

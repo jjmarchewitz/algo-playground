@@ -4,12 +4,24 @@ the project.
 
 """
 
-from alpaca_trade_api import REST, TimeFrameUnit
+from alpaca_trade_api import AsyncREST, REST, TimeFrameUnit
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from os import environ, getcwd, sep
 from pytz import timezone
 from re import findall
+import multiprocessing as mp
+
+
+########
+# INIT #
+########
+
+
+def apg_init():
+    mp.set_start_method('spawn')
+    alpaca_api = AlpacaAPIBundle()
+    return alpaca_api
 
 
 ##############
@@ -19,7 +31,7 @@ from re import findall
 
 class AlpacaAPIBundle():
     """
-    Grabs the Alpaca API keys from alpaca.config and uses them to instantiate each 
+    Grabs the Alpaca API keys from alpaca.config and uses them to instantiate each
     Alpaca REST API.
     """
 
@@ -75,6 +87,13 @@ class AlpacaAPIBundle():
 
         # Create the instance of the alpaca market data API
         self.market_data = REST(
+            api_key_ID,
+            secret_key,
+            market_data_website
+        )
+
+        # Create an async instance of the alpaca market data API
+        self.market_data_async = AsyncREST(
             api_key_ID,
             secret_key,
             market_data_website
