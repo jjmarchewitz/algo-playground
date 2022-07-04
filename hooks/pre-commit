@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "> Building documentation..."
 source docs/build_docs.sh > /dev/null
-git add .
+git add ../docs
