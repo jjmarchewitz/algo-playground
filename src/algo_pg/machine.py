@@ -96,27 +96,27 @@ class TradingMachine():
             # Update the current date variable in the machine
             self.current_trading_date = trading_day.date
 
-            self.asset_manager.start_new_day(
-                trading_day.open_time_iso, trading_day.close_time_iso)
+            # self.asset_manager.start_new_day(
+            #     trading_day.open_time_iso, trading_day.close_time_iso)
 
-            while not self.asset_manager.df_builders_at_end_of_day:
+            # while not self.asset_manager.df_builders_at_end_of_day:
 
-                self.asset_manager.increment()
+            #     self.asset_manager.increment()
 
-                if not self.asset_manager.df_builders_at_end_of_day:
+            #     if not self.asset_manager.df_builders_at_end_of_day:
 
-                    # For every algo - portfolio pair, simulate an entire day no matter
-                    # what the time frame is.
-                    for algo in self.algo_instances:
+            #         # For every algo - portfolio pair, simulate an entire day no matter
+            #         # what the time frame is.
+            #         for algo in self.algo_instances:
 
-                        portfolio = algo.portfolio
+            #             portfolio = algo.portfolio
 
-                        completed_order_ids = portfolio._process_pending_orders()
-                        algo.run_for_one_time_frame()
-                        print(
-                            f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
-                            f"${round(portfolio.total_value(), 2):,.2f} - "
-                            f"#{portfolio._increment_count}")
+            #             completed_order_ids = portfolio._process_pending_orders()
+            #             algo.run_for_one_time_frame()
+            #             print(
+            #                 f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
+            #                 f"${round(portfolio.total_value(), 2):,.2f} - "
+            #                 f"#{portfolio._increment_count}")
 
         # Print out the final values of each portfolio
         print("\n\n--Results--")
