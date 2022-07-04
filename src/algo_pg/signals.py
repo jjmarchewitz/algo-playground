@@ -1,7 +1,6 @@
 from algo_pg.util import get_list_of_trading_days_in_range
 from enum import Enum
 from multiprocessing import Process, Queue
-from time import sleep
 
 
 class AlpacaDataManager:
