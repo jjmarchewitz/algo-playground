@@ -9,19 +9,33 @@ class AlpacaDataManager:
         """DOC:"""
         self.alpaca_api = alpaca_api
         self.data_settings = data_settings
-        self.assets = {}
+        self.asset_dfs = {}
 
-        asset_df_queue = Queue()
-        queue_for_asset_list_updates = Queue()
+        self.asset_df_queue = Queue()
+        self.queue_for_asset_list_updates = Queue()
 
-        self.producer_process = self.spawn_producer_process(
-            queue_for_asset_list_updates, asset_df_queue)
-        self.consume(asset_df_queue)
+        self.producer_process = self.spawn_producer_process()
+        self.consume()
 
-    def consume(self, asset_df_queue):
+        self.trading_machine_current_day = None
+
+    def add_asset(self, symbol):
+        """DOC:"""
+        if symbol in self.asset_dfs.keys():
+            raise ValueError("Symbol is already in the asset manager!")
+
+        self.asset_dfs[symbol] = None
+
+        # TODO: Catch-up code here
+
+    def contains_asset(self, symbol):
+        """DOC:"""
+        return symbol in self.assets.keys()
+
+    def consume(self):
         """DOC:"""
         while True:
-            msg = asset_df_queue.get()
+            msg = self.asset_df_queue.get()
 
             if msg == "DONE":
                 self.teardown()
@@ -33,11 +47,11 @@ class AlpacaDataManager:
         """DOC:"""
         self.producer_process.join()
 
-    def spawn_producer_process(self, queue_for_asset_list_updates, asset_df_queue):
+    def spawn_producer_process(self):
         """DOC:"""
         alpaca_data_producer = AlpacaDataProducer(
-            self.alpaca_api, self.data_settings, queue_for_asset_list_updates,
-            asset_df_queue)
+            self.alpaca_api, self.data_settings, self.queue_for_asset_list_updates,
+            self.asset_df_queue)
 
         producer_process = Process(target=alpaca_data_producer.produce, args=[])
         producer_process.start()
@@ -58,6 +72,7 @@ class AlpacaDataProducer:
         self.data_settings = data_settings
         self.queue_for_asset_list_updates = queue_for_asset_list_updates
         self.asset_df_queue = asset_df_queue
+        self.symbols_list = []
 
         # Generates a list of MarketDay instances in order from self.start_date to
         # self.end_date to represent all of the days the market is open, and *only*
