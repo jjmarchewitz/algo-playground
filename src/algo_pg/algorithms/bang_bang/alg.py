@@ -14,7 +14,7 @@ class BangBang(Algorithm):
         self.portfolio.place_order("SPY", 5, OrderType.BUY)
         self.portfolio.place_order("GME", 5, OrderType.BUY)
 
-    def run_for_one_time_frame(self):
+    def on_new_time_frame(self):
 
         for symbol, position in self.portfolio.positions.items():
             data_manager = position.data_manager

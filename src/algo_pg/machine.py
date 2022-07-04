@@ -112,7 +112,7 @@ class TradingMachine():
             #             portfolio = algo.portfolio
 
             #             completed_order_ids = portfolio._process_pending_orders()
-            #             algo.run_for_one_time_frame()
+            #             algo.on_new_time_frame()
             #             print(
             #                 f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
             #                 f"${round(portfolio.total_value(), 2):,.2f} - "

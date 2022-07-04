@@ -9,5 +9,6 @@ class Algorithm():
         self.data_settings = data_settings
         self.portfolio = portfolio
 
-    def run_for_one_time_frame(self):
-        print("You should have your own implementation of this for your algorithm!")
+    def on_new_time_frame(self):
+        raise NotImplementedError(
+            "You should have your own implementation of this for your algorithm!")
