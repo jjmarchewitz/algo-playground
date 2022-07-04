@@ -78,8 +78,71 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="util">
-<h1>util<a class="headerlink" href="#util" title="Permalink to this headline"></a></h1>
+  <section id="module-util">
+<span id="util"></span><h1>util<a class="headerlink" href="#module-util" title="Permalink to this headline"></a></h1>
+<p>A general utility module to containing useful automation functions available globally to
+the project.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="util.AlpacaAPIBundle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">AlpacaAPIBundle</span></span><a class="headerlink" href="#util.AlpacaAPIBundle" title="Permalink to this definition"></a></dt>
+<dd><p>Grabs the Alpaca API keys from alpaca.config and uses them to instantiate each
+Alpaca REST API.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="util.TradingDay">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">TradingDay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_time_iso</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_time_iso</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.TradingDay" title="Permalink to this definition"></a></dt>
+<dd><p>A dataclass holding information for a single day the market is open, like the date.
+This dataclass also stores the market open time and close time in the ISO-8601
+format.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_datetime_obj_from_date">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_datetime_obj_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_datetime_obj_from_date" title="Permalink to this definition"></a></dt>
+<dd><p>TODO:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_list_of_trading_days_in_range">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_list_of_trading_days_in_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpaca_api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_list_of_trading_days_in_range" title="Permalink to this definition"></a></dt>
+<dd><p>TODO:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_price_from_bar">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_price_from_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_price_from_bar" title="Permalink to this definition"></a></dt>
+<dd><p>Determines an equivalent price for an asset during a bar from info about the
+bar itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bar</strong> – One bar of stock information that takes up one TimeFrame’s worth of time.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An average price to represent the bar, determined from information about the
+bar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_raw_trading_dates_in_range">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_raw_trading_dates_in_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpaca_api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_raw_trading_dates_in_range" title="Permalink to this definition"></a></dt>
+<dd><p>TODO:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_time_delta_from_time_frame">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_time_delta_from_time_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_time_delta_from_time_frame" title="Permalink to this definition"></a></dt>
+<dd><p>TODO:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="util.get_trading_day_obj_list_from_date_list">
+<span class="sig-prename descclassname"><span class="pre">util.</span></span><span class="sig-name descname"><span class="pre">get_trading_day_obj_list_from_date_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trading_date_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#util.get_trading_day_obj_list_from_date_list" title="Permalink to this definition"></a></dt>
+<dd><p>TODO:</p>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 </div>
 </section>

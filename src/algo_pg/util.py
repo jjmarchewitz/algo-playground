@@ -4,7 +4,7 @@ the project.
 
 """
 
-from alpaca_trade_api import Bar, Calendar, REST, TimeFrame, TimeFrameUnit
+from alpaca_trade_api import REST, TimeFrameUnit
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from os import environ, getcwd, sep
@@ -17,32 +17,13 @@ from re import findall
 ##############
 
 
-class AlgoPGConfig():
+class AlpacaAPIBundle():
     """
-    Grabs the Alpaca API keys from alpaca.config and uses them to instantiate each
+    Grabs the Alpaca API keys from alpaca.config and uses them to instantiate each 
     Alpaca REST API.
     """
 
-    trading: REST
-    market_data: REST
-    crypto: REST
-
-    def __init__(self, start_date: str, end_date: str, time_frame: TimeFrame,
-                 stat_dict: dict, max_rows_in_df: int, start_buffer_time_delta: timedelta,
-                 time_frames_between_algo_runs: int):
-
-        # Initialize all of the config data
-        self.start_date = start_date
-        self.end_date = end_date
-        self.time_frame = time_frame
-        self.stat_dict = stat_dict
-        self.max_rows_in_df = max_rows_in_df
-        self.start_buffer_time_delta = start_buffer_time_delta
-        self.time_frames_between_algo_runs = time_frames_between_algo_runs
-
-        self.create_alpaca_apis()
-
-    def create_alpaca_apis(self):
+    def __init__(self):
         repo_dir = findall("^.*algo-playground", getcwd())[0]
 
         # Grab all of the info contained in alpaca.config
@@ -124,29 +105,24 @@ class TradingDay():
     close_time_iso: str
 
 
-def get_list_of_trading_days_in_range(
-        market_data_api: REST, start_date: str, end_date: str) -> list[TradingDay]:
+def get_list_of_trading_days_in_range(alpaca_api, start_date, end_date):
     """
-    DOC:
+    TODO:
     """
-    raw_market_days = get_raw_trading_dates_in_range(
-        market_data_api, start_date, end_date)
+    raw_market_days = get_raw_trading_dates_in_range(alpaca_api, start_date, end_date)
     return get_trading_day_obj_list_from_date_list(raw_market_days)
 
 
-def get_raw_trading_dates_in_range(
-        market_data_api: REST, start_date: str, end_date: str) -> list[Calendar]:
+def get_raw_trading_dates_in_range(alpaca_api, start_date, end_date):
     """
-    DOC:
+    TODO:
     """
-    breakpoint()
-    return market_data_api.trading.get_calendar(start_date, end_date)
+    return alpaca_api.trading.get_calendar(start_date, end_date)
 
 
-def get_trading_day_obj_list_from_date_list(
-        trading_date_list: list[Calendar]) -> list[TradingDay]:
+def get_trading_day_obj_list_from_date_list(trading_date_list):
     """
-    DOC:
+    TODO:
     """
     trading_days = []
 
@@ -196,9 +172,9 @@ def get_trading_day_obj_list_from_date_list(
     return trading_days
 
 
-def get_datetime_obj_from_date(date: str) -> datetime:
+def get_datetime_obj_from_date(date):
     """
-    DOC:
+    TODO:
     """
     format_str = '%Y-%m-%d'
 
@@ -207,9 +183,9 @@ def get_datetime_obj_from_date(date: str) -> datetime:
     return dt_obj
 
 
-def get_time_delta_from_time_frame(time_frame: TimeFrame) -> timedelta:
+def get_time_delta_from_time_frame(time_frame):
     """
-    DOC:
+    TODO:
     """
     delta = None
 
@@ -231,7 +207,7 @@ def get_time_delta_from_time_frame(time_frame: TimeFrame) -> timedelta:
 ###################
 
 
-def get_price_from_bar(bar: Bar) -> float:
+def get_price_from_bar(bar):
     """
     Determines an equivalent price for an asset during a bar from info about the
     bar itself.
@@ -249,15 +225,3 @@ def get_price_from_bar(bar: Bar) -> float:
     price = bar.vw
 
     return price
-
-
-#######################
-# DATAFRAME UTILITIES #
-#######################
-
-# TODO: replace with numpy
-def trim_df(df, max_rows):
-    """DOC:"""
-    # Remove the first row from the df if the total row count is above the limit
-    if len(df.index) > max_rows:
-        df = df.iloc[1:]
