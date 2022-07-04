@@ -9,22 +9,7 @@ from algo_pg.data_manager import DataManager
 from algo_pg.util import get_list_of_trading_days_in_range, get_price_from_bar
 
 
-class PositionDataFrameBuilder():
-
-    # TODO:
-
-    def __init__(self, alpaca_api, data_settings, symbol):
-        # Bundled alpaca API dataclass
-        self.alpaca_api = alpaca_api
-
-        # Trading Machine settings dataclass
-        self.data_settings = data_settings
-
-        # Misc. instance variables
-        self.symbol = symbol
-
-
-class Position(PositionDataFrameBuilder):
+class Position():
     """
     This is a container for an individual position, like ETH or IVV. An instance is meant
     to be stored inside of a portfolio, so the position has a quantity currently held and

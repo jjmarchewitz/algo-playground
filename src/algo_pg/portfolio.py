@@ -286,6 +286,8 @@ class Portfolio():
 
         # Calculate total price of the order on the current bar
         current_timestamp = self.get_current_timestamp()
+
+        # TODO: Replace maybe?
         bar_for_current_order = self.alpaca_api.market_data.get_bars(
             order.symbol,
             self.data_settings.time_frame,
