@@ -5,8 +5,6 @@ data.
 """
 
 from algo_pg.algorithms.base_algorithm import Algorithm
-from algo_pg.asset_manager import AssetDataManager
-from algo_pg.util import get_list_of_trading_days_in_range
 from alpaca_trade_api import TimeFrame
 from dataclasses import dataclass
 from datetime import timedelta
@@ -57,16 +55,16 @@ class TradingMachine():
         # The only supported time frames for this class are minutes, hours, and days.
         self.time_frame = data_settings.time_frame
 
-        # Generates a list of MarketDay instances in order from self.start_date to
-        # self.end_date to represent all of the days the market is open, and *only*
-        # the days the market is open.
-        self.trading_days = get_list_of_trading_days_in_range(
-            self.alpaca_api, self.start_date, self.end_date)
+        # # Generates a list of MarketDay instances in order from self.start_date to
+        # # self.end_date to represent all of the days the market is open, and *only*
+        # # the days the market is open.
+        # self.trading_days = get_list_of_trading_days_in_range(
+        #     self.alpaca_api, self.start_date, self.end_date)
 
         # Pairs of algorithms and portfolios
         self.algo_instances = []
 
-        self.asset_manager = AssetDataManager(self.alpaca_api, self.data_settings)
+        # self.asset_manager = AssetDataManager(self.alpaca_api, self.data_settings)
 
     def add_algo_instance(self, algorithm_with_portfolio):
         """
@@ -90,33 +88,33 @@ class TradingMachine():
 
         print("\n> Starting machine...\n")
 
-        # For every day that the market will be open
-        for trading_day in self.trading_days:
+        # # For every day that the market will be open
+        # for trading_day in self.trading_days:
 
-            # Update the current date variable in the machine
-            self.current_trading_date = trading_day.date
+        #     # Update the current date variable in the machine
+        #     self.current_trading_date = trading_day.date
 
-            # self.asset_manager.start_new_day(
-            #     trading_day.open_time_iso, trading_day.close_time_iso)
+        # self.asset_manager.start_new_day(
+        #     trading_day.open_time_iso, trading_day.close_time_iso)
 
-            # while not self.asset_manager.df_builders_at_end_of_day:
+        # while not self.asset_manager.df_builders_at_end_of_day:
 
-            #     self.asset_manager.increment()
+        #     self.asset_manager.increment()
 
-            #     if not self.asset_manager.df_builders_at_end_of_day:
+        #     if not self.asset_manager.df_builders_at_end_of_day:
 
-            #         # For every algo - portfolio pair, simulate an entire day no matter
-            #         # what the time frame is.
-            #         for algo in self.algo_instances:
+        #         # For every algo - portfolio pair, simulate an entire day no matter
+        #         # what the time frame is.
+        #         for algo in self.algo_instances:
 
-            #             portfolio = algo.portfolio
+        #             portfolio = algo.portfolio
 
-            #             completed_order_ids = portfolio._process_pending_orders()
-            #             algo.on_new_time_frame()
-            #             print(
-            #                 f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
-            #                 f"${round(portfolio.total_value(), 2):,.2f} - "
-            #                 f"#{portfolio._increment_count}")
+        #             completed_order_ids = portfolio._process_pending_orders()
+        #             algo.on_new_time_frame()
+        #             print(
+        #                 f"{portfolio.name} | {portfolio.get_current_timestamp()} - "
+        #                 f"${round(portfolio.total_value(), 2):,.2f} - "
+        #                 f"#{portfolio._increment_count}")
 
         # Print out the final values of each portfolio
         print("\n\n--Results--")
