@@ -80,6 +80,9 @@ class TradingMachine():
         # before adding (type check)
         self.algo_instances.append(algorithm_with_portfolio)
 
+    def continue_to_date(self, new_end_date):
+        pass
+
     def run(self):
         """
         Run the trading machine and run all of the algorithm portfolio pairs from the

@@ -93,7 +93,7 @@ async def get_historic_quotes(symbols, start, end, timeframe: TimeFrame):
 async def run(symbols):
     start = pd.Timestamp('2022-06-10').date().isoformat()
     end = pd.Timestamp('2022-06-10').date().isoformat()
-    timeframe: TimeFrame = TimeFrame.Minute
+    timeframe: TimeFrame = TimeFrame.Hour
     return await get_historic_bars(symbols, start, end, timeframe)
     # await get_historic_trades(symbols, start, end, timeframe)
     # await get_historic_quotes(symbols, start, end, timeframe)
@@ -109,36 +109,32 @@ if __name__ == '__main__':
                      secret_key=api_secret,
                      data_url=base_url)
 
-    api = tradeapi.REST(key_id=api_key_id,
-                        secret_key=api_secret,
-                        base_url=URL(base_url))
-
     start_time = time.time()
-    # symbols = [
-    #     "AAPL", "GOOG", "IVV", "SPY", "INTC", "NVDA", "TSM", "MSFT", "TSLA", "META",
-    #     "AMZN", "UNH", "JNJ", "XOM", "SUN", "PG", "JPM", "WMT", "HD", "BABA", "BAC",
-    #     "PFE", "KO", "MA", "V", "ABBV", "NVO", "AVGO", "PEP", "TM", "SHEL", "VZ", "UL",
-    #     "TMO", "COST", "ABT", "CMCSA", "ADBE", "DIS", "NKE", "CSCO", "ORCL", "CRM",
-    #     "MCD", "TMUS", "BHP", "BMY", "PM", "WFC", "AMD", "UPS", "QCOM", "T", "TXN",
-    #     "RTX", "MS", "HON", "MDT", "IBM", "CVS", "LOW", "SCHW", "ANTM", "AXP", "CAT",
-    #     "LMT", "SPGI", "SONY", "SAP", "INTU", "BP", "BLK", "C", "PYPL", "BUD", "AMAT",
-    #     "MO", "ADP", "PLD", "SBUX", "PBR", "EOG", "BKNG", "DUK", "SYK", "ADI", "NFLX",
-    #     "CI", "GE", "BX", "MMM", "BAM", "INFY", "SO", "ZI", "BA", "ROK", "NOC", "TGT"
-    # ]
-    symbols = ["ZI"]
+    symbols = [
+        "AAPL", "GOOG", "IVV", "SPY", "INTC", "NVDA", "TSM", "MSFT", "TSLA", "META",
+        "AMZN", "UNH", "JNJ", "XOM", "SUN", "PG", "JPM", "WMT", "HD", "BABA", "BAC",
+        "PFE", "KO", "MA", "V", "ABBV", "NVO", "AVGO", "PEP", "TM", "SHEL", "VZ", "UL",
+        "TMO", "COST", "ABT", "CMCSA", "ADBE", "DIS", "NKE", "CSCO", "ORCL", "CRM",
+        "MCD", "TMUS", "BHP", "BMY", "PM", "WFC", "AMD", "UPS", "QCOM", "T", "TXN",
+        "RTX", "MS", "HON", "MDT", "IBM", "CVS", "LOW", "SCHW", "ANTM", "AXP", "CAT",
+        "LMT", "SPGI", "SONY", "SAP", "INTU", "BP", "BLK", "C", "PYPL", "BUD", "AMAT",
+        "MO", "ADP", "PLD", "SBUX", "PBR", "EOG", "BKNG", "DUK", "SYK", "ADI", "NFLX",
+        "CI", "GE", "BX", "MMM", "BAM", "INFY", "SO", "ZI", "BA", "ROK", "NOC", "TGT"
+    ]
+    # symbols = ["ZI"]
     test222 = asyncio.run(run(symbols))
     print(f"took {time.time() - start_time} sec")
 
-    alpaca_api = AlpacaAPIBundle()
+    # alpaca_api = AlpacaAPIBundle()
 
-    start_time = time.time()
-    test333 = []
+    # start_time = time.time()
+    # test333 = []
 
-    for symbol in symbols:
-        test333.append(alpaca_api.market_data.get_bars(
-            symbol, TimeFrame.Minute, "2022-06-10", "2022-06-10"))
+    # for symbol in symbols:
+    #     test333.append(alpaca_api.market_data.get_bars(
+    #         symbol, TimeFrame.Minute, "2022-06-10", "2022-06-10"))
 
-    time_taken = round(time.time() - start_time, 2)
-    print(f"\n\n--Time--\n{time_taken} s\n\n")
+    # time_taken = round(time.time() - start_time, 2)
+    # print(f"\n\n--Time--\n{time_taken} s\n\n")
 
     breakpoint()
